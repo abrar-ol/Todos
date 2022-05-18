@@ -2,23 +2,56 @@
 <h1 class="title is-1 has-text-centered">Todos</h1>
 </section>
 
-<div class="container">
+<div class="container add-todo-box-container">
 
   <div class="add-todo-box">
-    <form >
+    <form #form="ngForm" (ngSubmit)="onFormSubmit(form)">
+
       <h2 class="title is-5">New Todo</h2>
-      <div class="field is-grouped">
+      <div class="field is-grouped" style="margin: 0;">
 
         <p class="control is-expanded">
-          <input type="text" class="input">
+          <input
+          ngModel
+          required
+          #todoTextField="ngModel"
+          minlength="2"
+          name="text"
+          type="text"
+          class="input"
+          placeholder="Type todo text here ...">
         </p>
 
         <p class="control">
-          <a class="button is-info">Search</a>
+          <button class="button alt-graient-button">
+            <i class="material-icons">add</i>
+            Add
+          </button>
         </p>
-
       </div>
+
+      <div *ngIf="todoTextField.invalid && showValidationError">
+        <p class="help is-danger"  *ngIf="todoTextField.errors['required']">Please Enter your Todo</p>
+        <p class="help is-danger"  *ngIf="todoTextField.errors['minlength']">Please Enter at least 2 charecters</p>
+      </div>
+
     </form>
   </div>
 
 </div>
+
+<section class="section">
+  <div class="container">
+    <div class="todos-list">
+
+      <app-todo-item
+      *ngFor="let todo of todos"
+      [todo]="todo"
+      (todoClicked)="toggelCompleted(todo)"
+      (editClicked)="editTodo(todo)"
+      (deleteClicked)="deleteTodo(todo)"
+      ></app-todo-item>
+
+    </div>
+  </div>
+</section>
